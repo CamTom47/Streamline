@@ -21,4 +21,3 @@ export const getDatabaseUri = () => {
 //Change the work factor to speed up testing
 
 export const BCRYPT_WORK_FACTOR = process.env.NOD_ENV === "test" ? 1 : 12;
-fk;
