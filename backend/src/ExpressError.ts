@@ -23,7 +23,7 @@ export class BadRequestError extends ExpressError {
 }
 
 //401 Unauthorized
-export class UnauthorizedErorr extends ExpressError {
+export class UnauthorizedError extends ExpressError {
 	constructor(message = "Unauthorized") {
 		super(message, 401);
 	}
