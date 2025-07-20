@@ -27,3 +27,5 @@ app.use(function (err, req: Request, res: Response, next: NextFunction) {
 		error: { message, status },
 	});
 });
+
+export default app
