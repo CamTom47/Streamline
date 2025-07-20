@@ -12,7 +12,7 @@ router.get("/", checkCorrectUserOrAdmin, async (req: Request, res: Response, nex
 	try {
 		const { searchParams, FilterParams } = req.params;
 		const userId = req.body.user.id;
-		const tasks = await Task.findAll({ userId, searchParams, FilterParams });
+		const tasks = await Task.findAll(userId, searchParams, FilterParams );
 		return res.status(200).json({ tasks });
 	} catch (err) {
 		return next(err);
@@ -25,8 +25,8 @@ router.get("/", checkCorrectUserOrAdmin, async (req: Request, res: Response, nex
  */
 router.get("/:task_id", checkCorrectUserOrAdmin, async (req: Request, res: Response, next: NextFunction) => {
 	try {
-        const taskId = req.params.task_id
-        const task = await Task.find({taskId});
+        const taskId: number = +req.params.task_id
+        const task: object = await Task.find(taskId);
         return res.status(200).json({task})
 	} catch (err) {
 		return next(err);
@@ -39,7 +39,10 @@ router.get("/:task_id", checkCorrectUserOrAdmin, async (req: Request, res: Respo
  */
 router.patch("/:task_id", checkCorrectUserOrAdmin, async (req: Request, res: Response, next: NextFunction) => {
 	try {
-        
+        const taskId: number  = +req.params.task_id;
+		const data: object = req.body.data;
+		const updatedTask: object = await Task.update(taskId, data);
+		return res.status(200).json({updatedTask});
 	} catch (err) {
 		return next(err);
 	}
@@ -49,8 +52,11 @@ router.patch("/:task_id", checkCorrectUserOrAdmin, async (req: Request, res: Res
  * POST ROUTE
  * Create a new task
  */
-router.post("/:task_id", checkCorrectUserOrAdmin, async (req: Request, res: Response, next: NextFunction) => {
+router.post("/", checkCorrectUserOrAdmin, async (req: Request, res: Response, next: NextFunction) => {
 	try {
+		const data: object = req.body.data;
+		const newTask = await Task.create(data);
+		return res.status(201).json({newTask});
 	} catch (err) {
 		return next(err);
 	}
@@ -62,6 +68,9 @@ router.post("/:task_id", checkCorrectUserOrAdmin, async (req: Request, res: Resp
  */
 router.delete("/:task_id", checkCorrectUserOrAdmin, async (req: Request, res: Response, next: NextFunction) => {
 	try {
+		const taskId = req.params.task_id;
+		const deletedTask = await Task.remove(taskId);
+		return res.status(200).json({deletedTask})
 	} catch (err) {
 		return next(err);
 	}
