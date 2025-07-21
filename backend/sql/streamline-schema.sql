@@ -11,7 +11,9 @@ CREATE TABLE users (
 
 CREATE TABLE statuses (
     id SERIAL PRIMARY KEY,
-    name TEXT
+    name TEXT,
+    default BOOLEAN,
+    user_id INTEGER REFERENCES users(id)
 );
 
 CREATE TABLE lists (

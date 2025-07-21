@@ -98,7 +98,6 @@ class Task {
 
 	//#endregion
 
-	//TODO query for find
 	static async find(userId: number): Promise<{}> {
 		const results: { rows: {}[] } = await db.query(
 			`
@@ -112,13 +111,13 @@ class Task {
 		if (!task || Object.keys(task).length === 0) throw new NotFoundError();
 		return task;
 	}
-	//TODO query for create
+
 	static async create(data: NewTask): Promise<{}> {
 		const { title, userid, category, datecreated, duedate, priority, lists, status, description } = data;
 
 		const result = await db.query(
 			`
-            INSERT INTO tasks (title, userid, category, datecreated, duedate, priority, lists, status, description)
+            INSERT INTO tasks (title, user_id, category, date_created, due_date, priority, lists, status, description)
             VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)
             RETURNING id, title, user_id AS "userId", category, date_created AS "dateCreated", due_date AS "dueDate", priority, lists, status, description
             `,
@@ -129,7 +128,6 @@ class Task {
 		return newTask;
 	}
 
-	//TODO query for update
 	static async update(task_id: number, data: UpdateTask): Promise<{}> {
 		const { setCols, values } = sqlForPartialUpdate(data, {
 			duedate: "due_date",
