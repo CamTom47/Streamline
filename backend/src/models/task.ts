@@ -1,5 +1,6 @@
 import { db } from "../../db";
 import { BadRequestError, NotFoundError, ExpressError, UnauthorizedError } from "../ExpressError";
+import sqlForPartialUpdate from "../helpers/sql";
 
 interface NewTask {
 	title: string;
@@ -10,6 +11,15 @@ interface NewTask {
 	priority: number;
 	lists?: number[];
 	status: number;
+	description?: string;
+}
+interface UpdateTask {
+	title?: string;
+	category?: number;
+	duedate?: Date;
+	priority?: number;
+	lists?: number[];
+	status?: number;
 	description?: string;
 }
 interface TaskFilters {
@@ -120,6 +130,36 @@ class Task {
 	}
 
 	//TODO query for update
+	static async update(task_id: number, data: UpdateTask): Promise<{}> {
+		const { setCols, values } = sqlForPartialUpdate(data, {
+			duedate: "due_date",
+		});
 
-	//TODO query for delete
+		const taskIdx = `$${values.length + 1}`;
+
+		const sqlQuery = `
+			UPDATE tasks
+			SET ${setCols}
+			WHERE id ${taskIdx}
+			RETURNING *
+			`;
+
+		const result = await db.query(sqlQuery, [...values, task_id]);
+
+		const task = result.rows[0];
+		if (!task) throw new NotFoundError();
+		return task;
+	}
+
+	static async delete(task_id: number): Promise<{}> {
+		const result = await db.query(
+			`
+		DELETE FROM tasks
+		WHERE id = $1`,
+			[task_id]
+		);
+		const message = `Task ${task_id} was successfully deleted`;
+		const status = 200;
+		return { message, status };
+	}
 }
