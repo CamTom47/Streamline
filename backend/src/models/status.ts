@@ -54,13 +54,14 @@ class Status {
 
 	//#endregion
 
-	static async find(userId: number): Promise<{}> {
+	static async find(userId: number, taskId: number): Promise<{}> {
 		const results: { rows: {}[] } = await db.query(
 			`
         SELECT id, name, user_id
         FROM statuses
+        WHERE user_id = $1 AND id = $2
     `,
-			[userId]
+			[userId, taskId]
 		);
 
 		const status = results.rows[0] || {};

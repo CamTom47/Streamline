@@ -98,13 +98,14 @@ class Task {
 
 	//#endregion
 
-	static async find(userId: number): Promise<{}> {
+	static async find(userId: number, taskId): Promise<{}> {
 		const results: { rows: {}[] } = await db.query(
 			`
         SELECT id, title, user_id, category, date_created, due_date, priority, lists, status
         FROM tasks
+		WHERE user_id = $1 AND id = $2
     `,
-			[userId]
+			[userId, taskId]
 		);
 
 		const task = results.rows[0] || {};
