@@ -20,6 +20,8 @@ CREATE TABLE lists (
     id SERIAL PRIMARY KEY,
     title TEXT,
     date_created TIMESTAMP default now()
+    user_id INTEGER REFERENCES users(id);
+    description TEXT 
 );
 
 CREATE TABLE categories (
