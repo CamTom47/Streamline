@@ -3,36 +3,28 @@ import { BadRequestError, NotFoundError, ExpressError, UnauthorizedError } from 
 import sqlForPartialUpdate from "../helpers/sql";
 
 interface NewList {
-    title: String;
-    user_id: Number;
-    description: String
+	title: string;
+	user_id: number;
+	description: string;
+	system_default: boolean;
 }
-interface UpdateList {
-	title: String;
-    description: String;
+interface UpdatedList {
+	title: string;
+	description: string;
 }
 interface SortParams {
-	title: number;
+	sortBy: string;
 }
 
 class List {
 	static async findAll(userId: number, sortParams: SortParams): Promise<{}> {
 		let query: string = `
-        SELECT id, title, date_created, user_id, description
-        FROM statuses
+        SELECT id, title, date_created, user_id AS "userId", description
+        FROM lists
     `;
 
 		const whereExpressions: string[] = [];
 		const queryValues: any[] = [];
-
-        const sortExpression: string[] = [];
-        const sortValues: string[] = [];
-
-
-        //check conditionals to add to sort expressions and sort values;
-        if(sortParams.title){
-            sortValues.push(sortParams.title)   
-        }
 
 		//check conditionals to add to where expressions and query values;
 
@@ -43,35 +35,40 @@ class List {
 			whereExpressions.push(`user_id = $${queryValues.length}`);
 		}
 
-		if (sortParams.title) {
-			queryValues.push(sortParams.id);
-			whereExpressions.push(`id = ${whereExpressions.length}`);
-		}
-
 		if (whereExpressions.length) {
-			if(whereExpressions.length === 1){
-             (query += `\nWHERE` + whereExpressions[0])
-            } else {
-              (query += `\nWHERE` + whereExpressions.join(" OR "));
-            }
-            query += ` AND system_default = true`
+			if (whereExpressions.length === 1) {
+				query += `\nWHERE` + whereExpressions[0];
+			} else {
+				query += `\nWHERE` + whereExpressions.join(" OR ");
+			}
 		}
+		//#endregion
+
+		//*region Sorting Functionality
+
+		//check conditionals to add to sort expressions and sort values;
+		//Sort params will be <sortId>Asc or <sortId>Des, allowing for split on params split back 3 from the end.
+		if (sortParams.sortBy) {
+			const sortCol = sortParams.sortBy.slice(0, sortParams.sortBy.length - 4);
+			const sortType = sortParams.sortBy.slice(sortParams.sortBy.length - 1, -3);
+			query += `ORDER BY ${sortCol} ${sortType}`;
+		}
+		//#endregion
+
 		const result = await db.query(query, queryValues);
-		const statuses: Status[] = result.rows;
-		if (!statuses) throw new NotFoundError();
-		return statuses;
+		const lists: List[] = result.rows;
+		if (!lists) throw new NotFoundError();
+		return lists;
 	}
 
-	//#endregion
-
-	static async find(userId: number, taskId: number): Promise<{}> {
+	static async find(userId: number, listId: number): Promise<{}> {
 		const results: { rows: {}[] } = await db.query(
 			`
-        SELECT id, name, user_id
-        FROM statuses
+        SELECT id, title, date_created, description, user_id AS "userId"
+        FROM lists
         WHERE user_id = $1 AND id = $2
     `,
-			[userId, taskId]
+			[userId, listId]
 		);
 
 		const status = results.rows[0] || {};
@@ -79,50 +76,50 @@ class List {
 		return status;
 	}
 
-	static async create(userId: number, {name, system_default = false}: NewStatus): Promise<{}> {
-
+	static async create(userId: number, { title, system_default = false, description, user_id }: NewList): Promise<{}> {
 		const result = await db.query(
 			`
-            INSERT INTO statuses (name, user_id, system_default)
-            VALUES($1, $2, $3)
-            RETURNING id, name, user_id AS "userId"
+            INSERT INTO lists (title, user_id, system_default, description)
+            VALUES($1, $2, $3, $4)
+            RETURNING id, title, user_id AS "userId", description
             `,
-			[name, userId, system_default]
+			[title, userId, system_default, description]
 		);
-		const newStatus = result.rows[0];
-		if (!newStatus) throw new BadRequestError();
-		return newStatus;
+		const newList = result.rows[0];
+		if (!newList) throw new BadRequestError();
+		return newList;
 	}
 
-	static async update(status_id: number, data: UpdateStatus): Promise<{}> {
+	static async update(list_id: number, data: UpdatedList): Promise<{}> {
 		const { setCols, values } = sqlForPartialUpdate(data, {
-			name: "name",
+			title: "title",
+			description: "description",
 		});
 
-		const statusIdx = `$${values.length + 1}`;
+		const listIdx = `$${values.length + 1}`;
 
 		const sqlQuery = `
-			UPDATE statuses
+			UPDATE lists
 			SET ${setCols}
-			WHERE id ${statusIdx}
-			RETURNING *
+			WHERE id ${listIdx}
+			RETURNING id, title, user_id AS "userId", description
 			`;
 
-		const result = await db.query(sqlQuery, [...values, status_id]);
+		const result = await db.query(sqlQuery, [...values, list_id]);
 
-		const status = result.rows[0];
-		if (!status) throw new NotFoundError();
-		return status;
+		const list = result.rows[0];
+		if (!list) throw new NotFoundError();
+		return list;
 	}
 
-	static async delete(status_id: number): Promise<{}> {
+	static async delete(list_id: number): Promise<{}> {
 		const result = await db.query(
 			`
-		DELETE FROM statuses
+		DELETE FROM lists
 		WHERE id = $1`,
-			[status_id]
+			[list_id]
 		);
-		const message = `Status ${status_id} was successfully deleted`;
+		const message = `Status ${list_id} was successfully deleted`;
 		const status = 200;
 		return { message, status };
 	}
