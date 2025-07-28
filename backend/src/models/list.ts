@@ -1,3 +1,4 @@
+import { DefaultDeserializer } from "v8";
 import { db } from "../../db";
 import { BadRequestError, NotFoundError, ExpressError, UnauthorizedError } from "../ExpressError";
 import sqlForPartialUpdate from "../helpers/sql";
@@ -124,3 +125,5 @@ class List {
 		return { message, status };
 	}
 }
+
+export default List
