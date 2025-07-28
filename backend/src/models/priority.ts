@@ -30,3 +30,5 @@ class Priority {
 		return priority;
 	}
 }
+
+export default Priority
