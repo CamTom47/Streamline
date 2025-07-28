@@ -126,6 +126,18 @@ class Task {
 		);
 		const newTask = result.rows[0];
 		if (!newTask) throw new BadRequestError();
+
+		if (category) {
+		}
+
+		const taskCategoryQuery = await db.query(
+			`
+		INSERT INTO tasks_categories (task_id, category_id)
+		VALUES ($1, $2)
+		RETURNING id, task_id, category_id
+		`,
+			[newTask.id, category]
+		);
 		return newTask;
 	}
 
@@ -145,9 +157,21 @@ class Task {
 
 		const result = await db.query(sqlQuery, [...values, task_id]);
 
-		const task = result.rows[0];
-		if (!task) throw new NotFoundError();
-		return task;
+		const updatedTask = result.rows[0];
+		if (!updatedTask) throw new NotFoundError();
+
+		if (updatedTask) {
+			const updatedTaskCategoryQuery = await db.query(
+				`
+				UPDATE tasks_categories
+				SET category_id = $1
+				WHERE id = $2
+				RETURNING *
+				`,
+				[data.category, updatedTask.id]
+			);
+		}
+		return updatedTask;
 	}
 
 	static async delete(task_id: number): Promise<{}> {
