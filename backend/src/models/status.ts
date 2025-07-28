@@ -117,3 +117,5 @@ class Status {
 		return { message, status };
 	}
 }
+
+export default Status
