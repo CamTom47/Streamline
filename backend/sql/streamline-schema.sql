@@ -19,14 +19,15 @@ CREATE TABLE statuses (
 CREATE TABLE lists (
     id SERIAL PRIMARY KEY,
     title TEXT,
-    date_created TIMESTAMP default now()
-    user_id INTEGER REFERENCES users(id);
-    description TEXT 
+    date_created TIMESTAMP default now(),
+    user_id INTEGER REFERENCES users(id),
+    description TEXT
 );
 
 CREATE TABLE categories (
     id SERIAL PRIMARY KEY,
-    name TEXT
+    name TEXT,
+    user_id INTEGER REFERENCES users(id)
 );
 
 CREATE TABLE priorities(
@@ -49,4 +50,6 @@ CREATE TABLE tasks (
 
 CREATE TABLE tasks_categories (
     id SERIAL PRIMARY KEY
+    task_id INTEGER REFERENCES task(id),
+    category_id INTEGER REFERENCES category(id)
 );
