@@ -3,7 +3,8 @@ import { Request, Response, NextFunction } from "express";
 const router = express.Router();
 import { checkLoggedIn, checkCorrectUserOrAdmin } from "../middleware/auth";
 import Task from "../models/task";
-import { NewTask, UpdateTask, TaskFilters, TaskSearches } from "../types/task-type";
+import { NewTask, UpdateTask, TaskFilters, TaskSorts } from "../types/task-type";
+import qs from 'qs';
 
 /**
  * PLAN FOR FILTER AND SORTING
@@ -31,19 +32,10 @@ import { NewTask, UpdateTask, TaskFilters, TaskSearches } from "../types/task-ty
 router.get("/", checkCorrectUserOrAdmin, async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const urlParams: string = req.query.toString();
-		const filterParams = urlParams.slice(0, urlParams.indexOf('sort') - 1)
-		const sortParams = urlParams.slice(urlParams.indexOf('sort'))
-
-		const sort: string = req.params.sort;
-		const order: string = req.params.order;
-		const FilterParams = req.body.FilterParams || req.params.filter;
-
-		const searchParams: TaskSearches = {
-			sort: sort,
-			order: order,
-		};
+		const filterParams: TaskFilters = qs.parse(urlParams.slice(0, urlParams.indexOf('sort') - 1))
+		const sortParams: TaskSorts = qs.parse(urlParams.slice(urlParams.indexOf('sort')))
 		const userId = req.body.user.id;
-		const tasks = await Task.findAll(userId, searchParams, FilterParams);
+		const tasks = await Task.findAll(userId, sortParams, filterParams);
 		return res.status(200).json({ tasks });
 	} catch (err) {
 		return next(err);
@@ -57,7 +49,8 @@ router.get("/", checkCorrectUserOrAdmin, async (req: Request, res: Response, nex
 router.get("/:task_id", checkCorrectUserOrAdmin, async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const taskId: number = +req.params.task_id;
-		const task: object = await Task.find(taskId);
+		const userId: number = +req.body.user_id
+		const task: object = await Task.find(userId, taskId);
 		return res.status(200).json({ task });
 	} catch (err) {
 		return next(err);
@@ -71,7 +64,7 @@ router.get("/:task_id", checkCorrectUserOrAdmin, async (req: Request, res: Respo
 router.patch("/:task_id", checkCorrectUserOrAdmin, async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const taskId: number = +req.params.task_id;
-		const data: object = req.body.data;
+		const data: UpdateTask = req.body.data;
 		const updatedTask: object = await Task.update(taskId, data);
 		return res.status(200).json({ updatedTask });
 	} catch (err) {
@@ -85,7 +78,7 @@ router.patch("/:task_id", checkCorrectUserOrAdmin, async (req: Request, res: Res
  */
 router.post("/", checkCorrectUserOrAdmin, async (req: Request, res: Response, next: NextFunction) => {
 	try {
-		const data: object = req.body.data;
+		const data: NewTask = req.body.data;
 		const newTask = await Task.create(data);
 		return res.status(201).json({ newTask });
 	} catch (err) {
@@ -99,8 +92,8 @@ router.post("/", checkCorrectUserOrAdmin, async (req: Request, res: Response, ne
  */
 router.delete("/:task_id", checkCorrectUserOrAdmin, async (req: Request, res: Response, next: NextFunction) => {
 	try {
-		const taskId = req.params.task_id;
-		const deletedTask = await Task.remove(taskId);
+		const taskId = +req.params.task_id;
+		const deletedTask = await Task.delete(taskId);
 		return res.status(200).json({ deletedTask });
 	} catch (err) {
 		return next(err);

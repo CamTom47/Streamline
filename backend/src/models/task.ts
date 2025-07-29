@@ -1,13 +1,13 @@
 import { db } from "../../db";
 import { BadRequestError, NotFoundError, ExpressError, UnauthorizedError } from "../ExpressError";
 import sqlForPartialUpdate from "../helpers/sql";
-import { NewTask, UpdateTask, TaskFilters, TaskSearches } from "../types/task-type";
+import { NewTask, UpdateTask, TaskFilters, TaskSorts } from "../types/task-type";
 
 
 
 class Task {
 	//TODO query for findall
-	static async findAll(userId: number, searchParams: TaskSearches, FilterParams: TaskFilters): Promise<{}> {
+	static async findAll(userId: number, searchParams: TaskSorts, FilterParams: TaskFilters): Promise<{}> {
 		let query: string = `
         SELECT id, title, user_id, category, date_created, due_date, priority, lists, status
         FROM tasks

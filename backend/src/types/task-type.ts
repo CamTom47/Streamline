@@ -27,7 +27,7 @@ export interface TaskFilters {
 	list?: number;
 	status?: number;
 }
-export interface TaskSearches {
+export interface TaskSorts {
 	sort?: string;
 	order?: string;
 }
