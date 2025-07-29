@@ -1,40 +1,9 @@
 import { db } from "../../db";
 import { BadRequestError, NotFoundError, ExpressError, UnauthorizedError } from "../ExpressError";
 import sqlForPartialUpdate from "../helpers/sql";
+import { NewTask, UpdateTask, TaskFilters, TaskSearches } from "../types/task-type";
 
-interface NewTask {
-	title: string;
-	userid: number;
-	category?: number;
-	datecreated: Date;
-	duedate?: Date;
-	priority: number;
-	lists?: number[];
-	status: number;
-	description?: string;
-}
-interface UpdateTask {
-	title?: string;
-	category?: number;
-	duedate?: Date;
-	priority?: number;
-	lists?: number[];
-	status?: number;
-	description?: string;
-}
-interface TaskFilters {
-	category?: number;
-	dueDateOn?: Date;
-	dueDateBefore?: Date;
-	dueDateAfter?: Date;
-	priority?: number;
-	list?: number;
-	status?: number;
-}
-interface TaskSearches {
-	tileSearch: Text;
-	descriptionSearch: Text;
-}
+
 
 class Task {
 	//TODO query for findall
@@ -186,3 +155,5 @@ class Task {
 		return { message, status };
 	}
 }
+
+export default Task
