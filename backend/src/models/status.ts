@@ -4,8 +4,8 @@ import sqlForPartialUpdate from "../helpers/sql";
 
 interface NewStatus {
 	name: String;
-    system_default: Boolean;
-    user_id: Number
+	system_default: Boolean;
+	user_id: Number;
 }
 interface UpdateStatus {
 	name: String;
@@ -15,7 +15,7 @@ interface StatusFilters {
 }
 
 class Status {
-	static async findAll(userId: number, FilterParams: StatusFilters): Promise<{}> {
+	static async findAll(userId: number): Promise<{}> {
 		let query: string = `
         SELECT id, name, user_id
         FROM statuses
@@ -26,33 +26,25 @@ class Status {
 
 		//check conditionals to add to where expressions and query values;
 
-		//#region Filter Functionality
 		//check for specific key-values from
 		if (userId) {
 			queryValues.push(userId);
 			whereExpressions.push(`user_id = $${queryValues.length}`);
 		}
 
-		if (FilterParams.id) {
-			queryValues.push(FilterParams.id);
-			whereExpressions.push(`id = ${whereExpressions.length}`);
-		}
-
 		if (whereExpressions.length) {
-			if(whereExpressions.length === 1){
-             (query += `\nWHERE` + whereExpressions[0])
-            } else {
-              (query += `\nWHERE` + whereExpressions.join(" OR "));
-            }
-            query += ` AND system_default = true`
+			if (whereExpressions.length === 1) {
+				query += `\nWHERE` + whereExpressions[0];
+			} else {
+				query += `\nWHERE` + whereExpressions.join(" OR ");
+			}
+			query += ` AND system_default = true`;
 		}
 		const result = await db.query(query, queryValues);
 		const statuses: Status[] = result.rows;
 		if (!statuses) throw new NotFoundError();
 		return statuses;
 	}
-
-	//#endregion
 
 	static async find(userId: number, taskId: number): Promise<{}> {
 		const results: { rows: {}[] } = await db.query(
@@ -69,8 +61,7 @@ class Status {
 		return status;
 	}
 
-	static async create(userId: number, {name, system_default = false}: NewStatus): Promise<{}> {
-
+	static async create(userId: number, { name, system_default = false }: NewStatus): Promise<{}> {
 		const result = await db.query(
 			`
             INSERT INTO statuses (name, user_id, system_default)
@@ -118,4 +109,4 @@ class Status {
 	}
 }
 
-export default Status
+export default Status;

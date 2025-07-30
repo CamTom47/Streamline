@@ -1,9 +1,9 @@
 export interface NewTask {
 	title: string;
-	userid: number;
+	userId: number;
 	category?: number;
-	datecreated: Date;
-	duedate?: Date;
+	dateCreated: Date;
+	dueDate?: Date;
 	priority: number;
 	lists?: number[];
 	status: number;
@@ -12,7 +12,7 @@ export interface NewTask {
 export interface UpdateTask {
 	title?: string;
 	category?: number;
-	duedate?: Date;
+	dueDate?: Date;
 	priority?: number;
 	lists?: number[];
 	status?: number;

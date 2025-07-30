@@ -3,8 +3,8 @@ import { Request, Response, NextFunction } from "express";
 const router = express.Router();
 import { checkLoggedIn, checkCorrectUserOrAdmin } from "../middleware/auth";
 import Task from "../models/task";
-import { NewTask, UpdateTask, TaskFilters, TaskSorts } from "../types/task-type";
-import qs from 'qs';
+import { NewTask, UpdateTask, TaskFilters, TaskSorts } from "../types/task-types";
+import qs from "qs";
 
 /**
  * PLAN FOR FILTER AND SORTING
@@ -32,8 +32,8 @@ import qs from 'qs';
 router.get("/", checkCorrectUserOrAdmin, async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const urlParams: string = req.query.toString();
-		const filterParams: TaskFilters = qs.parse(urlParams.slice(0, urlParams.indexOf('sort') - 1))
-		const sortParams: TaskSorts = qs.parse(urlParams.slice(urlParams.indexOf('sort')))
+		const filterParams: TaskFilters = qs.parse(urlParams.slice(0, urlParams.indexOf("sort") - 1));
+		const sortParams: TaskSorts = qs.parse(urlParams.slice(urlParams.indexOf("sort")));
 		const userId = req.body.user.id;
 		const tasks = await Task.findAll(userId, sortParams, filterParams);
 		return res.status(200).json({ tasks });
@@ -49,7 +49,7 @@ router.get("/", checkCorrectUserOrAdmin, async (req: Request, res: Response, nex
 router.get("/:task_id", checkCorrectUserOrAdmin, async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const taskId: number = +req.params.task_id;
-		const userId: number = +req.body.user_id
+		const userId: number = +req.body.user_id;
 		const task: object = await Task.find(userId, taskId);
 		return res.status(200).json({ task });
 	} catch (err) {
@@ -76,7 +76,7 @@ router.patch("/:task_id", checkCorrectUserOrAdmin, async (req: Request, res: Res
  * POST ROUTE
  * Create a new task
  */
-router.post("/", checkCorrectUserOrAdmin, async (req: Request, res: Response, next: NextFunction) => {
+router.post("/", checkLoggedIn, async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const data: NewTask = req.body.data;
 		const newTask = await Task.create(data);

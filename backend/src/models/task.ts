@@ -1,9 +1,7 @@
 import { db } from "../../db";
 import { BadRequestError, NotFoundError, ExpressError, UnauthorizedError } from "../ExpressError";
 import sqlForPartialUpdate from "../helpers/sql";
-import { NewTask, UpdateTask, TaskFilters, TaskSorts } from "../types/task-type";
-
-
+import { NewTask, UpdateTask, TaskFilters, TaskSorts } from "../types/task-types";
 
 class Task {
 	//TODO query for findall
@@ -156,4 +154,4 @@ class Task {
 	}
 }
 
-export default Task
+export default Task;

@@ -66,7 +66,7 @@ export const checkAdmin = (req: Request, res: Response, next: NextFunction) => {
 export const checkCorrectUserOrAdmin = (req: Request, res: Response, next: NextFunction) => {
     try{
         const user = res.locals.user;
-        if(!(user && (req.params.username === user.username || user.isAdmin)))throw new UnauthorizedError();
+        if(!(user && (req.body.headers.user.username === user.username || user.isAdmin)))throw new UnauthorizedError();
     } catch(err){
         return next(err);
     }
