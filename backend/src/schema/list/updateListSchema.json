@@ -1,0 +1,22 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://streamline.com/updateListSchema",
+	"name": "Update List Schema",
+	"description": "A schema for updating a List in the streamline application",
+	"type": "object",
+	"properties": {
+		"title": {
+			"type": "string",
+			"description": "The title of the category"
+		},
+        "userId": {
+            "type": "integer",
+            "description": "The id of the user creating the new category"
+        },
+		"description": {
+			"type": "string",
+			"description": "The description of the list"
+		}
+	},
+	"required": ["userId"]
+}

@@ -1,49 +1,49 @@
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
-    first_name TEXT,
-    last_name TEXT,
+    first_name REQUIRED TEXT,
+    last_name REQUIRED TEXT,
     email TEXT,
-    username VARCHAR(20) UNIQUE NOT NULL,
-    password TEXT,
+    username REQUIRED VARCHAR(20) UNIQUE NOT NULL,
+    password REQUIRED TEXT,
     role TEXT, 
     date_created TIMESTAMP default now()
 );
 
 CREATE TABLE statuses (
     id SERIAL PRIMARY KEY,
-    name TEXT,
+    name REQUIRED TEXT,
     default BOOLEAN,
-    user_id INTEGER REFERENCES users(id)
+    user_id REQUIRED INTEGER REFERENCES users(id)
 );
 
 CREATE TABLE lists (
     id SERIAL PRIMARY KEY,
-    title TEXT,
+    title REQUIRED TEXT,
     date_created TIMESTAMP default now(),
-    user_id INTEGER REFERENCES users(id),
+    user_id REQUIRED INTEGER REFERENCES users(id),
     description TEXT
 );
 
 CREATE TABLE categories (
     id SERIAL PRIMARY KEY,
-    name TEXT,
-    user_id INTEGER REFERENCES users(id)
+    name REQUIRED TEXT,
+    user_id REQUIRED INTEGER REFERENCES users(id)
 );
 
 CREATE TABLE priorities(
     id SERIAL PRIMARY KEY,
-    name TEXT
+    name REQUIRED TEXT
 );
 
 CREATE TABLE tasks (
     id SERIAL PRIMARY KEY,
-    title TEXT, 
-    user_id INTEGER REFERENCES users(id),
+    title REQUIRED TEXT, 
+    user_id REQUIRED INTEGER REFERENCES users(id),
     category INTEGER REFERENCES categories(id),
     date_created TIMESTAMP default now(),
     due_date TIMESTAMP,
     priority INTEGER REFERENCES priorities(id),
-    lists INTEGER REFERENCES lists(id),
+    lists REQUIRED INTEGER REFERENCES lists(id),
     status INTEGER REFERENCES statuses(id),
     description TEXT
 );

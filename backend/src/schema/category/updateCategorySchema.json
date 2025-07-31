@@ -1,0 +1,14 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://streamline.com/updateCategorySchema",
+	"name": "Update Category Schema",
+	"description": "A schema for updating a category in the streamline application",
+	"type": "object",
+	"properties": {
+		"name": {
+			"type": "string",
+			"description": "The title of the category"
+		}
+	},
+	"required": ["name"]
+}

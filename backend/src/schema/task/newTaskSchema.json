@@ -1,0 +1,47 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://streamline.com/newTaskSchema",
+    "name": "New Task Schema",
+    "description": "A schema for new tasks in the streamline application",
+    "type": "object",
+    "properties": {
+        "title": {
+            "type": "string",
+            "description": "The title of the task"
+        },
+        "userId": {
+            "type": "integer",
+            "description": "The id of the user creating the task"
+        },
+        "category": {
+            "type": "integer",
+            "description": "The id of the category the task belongs to"
+        },
+        "dateCreated": {
+            "type": "string",
+            "description": "The date the task was created"
+        },
+        "dueDate": {
+            "type": "string",
+            "description": "The date the task is due to be completed"
+        },
+        "priority": {
+            "type": "integer",
+            "description": "The priority id of the task"
+        },
+        "list": {
+            "type": "integer",
+            "description": "The id of the list the task is on"
+        },
+        "status": {
+            "type": "integer",
+            "description": "The id of the status of the task"
+        },
+        "description": {
+            "type": "string",
+            "description": "A description of the task"
+        }
+    },
+    "required": ["title", "userId", "list"]
+
+}

@@ -1,0 +1,27 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://streamline.com/newListSchema",
+	"name": "New List Schema",
+	"description": "A schema for a new List in the streamline application",
+	"type": "object",
+	"properties": {
+		"title": {
+			"type": "string",
+			"description": "The title of the category"
+		},
+        "userId": {
+            "type": "integer",
+            "description": "The id of the user creating the new category"
+        },
+		"dateCreated": {
+			"type": "string",
+			"description": "The date teh list was created",
+			"format": "date-time"
+		},
+		"description": {
+			"type": "string",
+			"description": "The description of the list"
+		}
+	},
+	"required": ["title", "userId"]
+}
