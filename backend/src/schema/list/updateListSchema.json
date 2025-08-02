@@ -9,14 +9,9 @@
 			"type": "string",
 			"description": "The title of the category"
 		},
-        "userId": {
-            "type": "integer",
-            "description": "The id of the user creating the new category"
-        },
 		"description": {
 			"type": "string",
 			"description": "The description of the list"
 		}
-	},
-	"required": ["userId"]
+	}
 }
