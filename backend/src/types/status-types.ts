@@ -1,6 +1,7 @@
 export interface NewStatus {
 	name: string;
-	default: boolean
+	systemDefault: boolean;
+	user_id: Number;
 }
 export interface UpdateStatus {
 	name: string;

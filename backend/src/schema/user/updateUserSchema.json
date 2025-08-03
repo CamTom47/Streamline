@@ -1,43 +1,35 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://streamline.com/newTaskSchema",
-    "name": "New Task Schema",
-    "description": "A schema for new tasks in the streamline application",
+    "$id": "https://streamline.com/updateUserSchema",
+    "name": "Update User Schema",
+    "description": "A schema for updating user information in the streamline application",
     "type": "object",
     "properties": {
-        "title": {
+        "firstName": {
             "type": "string",
             "description": "The title of the task"
         },
-        "userId": {
+        "lastName": {
             "type": "integer",
             "description": "The id of the user creating the task"
         },
-        "category": {
+        "email": {
             "type": "integer",
             "description": "The id of the category the task belongs to"
         },
-        "dueDate": {
+        "username": {
             "type": "string",
             "description": "The date the task is due to be completed"
         },
-        "priority": {
+        "password": {
             "type": "integer",
             "description": "The priority id of the task"
         },
-        "list": {
+        "role": {
             "type": "integer",
             "description": "The id of the list the task is on"
-        },
-        "status": {
-            "type": "integer",
-            "description": "The id of the status of the task"
-        },
-        "description": {
-            "type": "string",
-            "description": "A description of the task"
         }
     },
-    "required": ["title", "userId", "list"]
+    "required": ["firstName", "lastName", "username", "password", "role"]
 
 }
