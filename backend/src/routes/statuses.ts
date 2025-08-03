@@ -1,6 +1,5 @@
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 const router = express.Router();
-import { Request, Response, NextFunction } from "express";
 import { checkLoggedIn, checkCorrectUserOrAdmin } from "../middleware/auth";
 import Status from "../models/status";
 import { NewStatus, UpdateStatus } from "../types/status-types";
