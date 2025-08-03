@@ -1,0 +1,19 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://streamline.com/loginSchema",
+    "name": "Login User Schema",
+    "description": "A schema for login information in the streamline application",
+    "type": "object",
+    "properties": {
+        "username": {
+            "type": "string",
+            "description": "The date the task is due to be completed"
+        },
+        "password": {
+            "type": "integer",
+            "description": "The priority id of the task"
+        }
+    },
+    "required": ["username", "password"]
+
+}

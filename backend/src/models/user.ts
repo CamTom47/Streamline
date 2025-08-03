@@ -13,7 +13,7 @@ class User {
 		email,
 		password,
 		role = "member",
-	}: NewUser): Promise<{} | void> {
+	}: NewUser){
 		//Check to make sure that the requested username is valid
 		const usernameExists = await db.query(
 			`
@@ -39,7 +39,7 @@ class User {
 		return newUser;
 	}
 
-	static async authenticate(username: string, password: string): Promise<{} | void> {
+	static async authenticate(username: string, password: string) {
 		const result = await db.query(
 			`
             SELECT id, first_name, last_name, username, email, password, is_admin
@@ -57,6 +57,8 @@ class User {
 				return user;
 			}
 		}
+
+        return new NotFoundError("Invalid Username/Password")
 	}
 
 	static async update(userId: number, data: UpdateUser): Promise<{} | void> {
