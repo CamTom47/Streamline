@@ -1,8 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
-import { BadRequestError } from "../ExpressError";
 import { checkLoggedIn, checkAdmin, checkCorrectUserOrAdmin } from "../middleware/auth";
 import Priority from "../models/priority";
-import jsonschema from "jsonschema";
 
 const router = express.Router();
 
