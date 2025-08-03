@@ -1,24 +1,20 @@
-import { DefaultDeserializer } from "v8";
 import { db } from "../../db";
 import { BadRequestError, NotFoundError, ExpressError, UnauthorizedError } from "../ExpressError";
 import sqlForPartialUpdate from "../helpers/sql";
 
 interface NewList {
 	title: string;
-	user_id: number;
+	userId: number;
 	description: string;
-	system_default: boolean;
+	systemDefault: boolean;
 }
 interface UpdatedList {
 	title: string;
 	description: string;
 }
-interface SortParams {
-	sortBy: string;
-}
 
 class List {
-	static async findAll(userId: number, sortParams: SortParams): Promise<{}> {
+	static async findAll(userId: number): Promise<{}> {
 		let query: string = `
         SELECT id, title, date_created, user_id AS "userId", description
         FROM lists
@@ -45,31 +41,20 @@ class List {
 		}
 		//#endregion
 
-		//*region Sorting Functionality
-
-		//check conditionals to add to sort expressions and sort values;
-		//Sort params will be <sortId>Asc or <sortId>Des, allowing for split on params split back 3 from the end.
-		if (sortParams.sortBy) {
-			const sortCol = sortParams.sortBy.slice(0, sortParams.sortBy.length - 4);
-			const sortType = sortParams.sortBy.slice(sortParams.sortBy.length - 1, -3);
-			query += `ORDER BY ${sortCol} ${sortType}`;
-		}
-		//#endregion
-
 		const result = await db.query(query, queryValues);
 		const lists: List[] = result.rows;
 		if (!lists) throw new NotFoundError();
 		return lists;
 	}
 
-	static async find(userId: number, listId: number): Promise<{}> {
+	static async find(listId: number): Promise<{}> {
 		const results: { rows: {}[] } = await db.query(
 			`
         SELECT id, title, date_created, description, user_id AS "userId"
         FROM lists
-        WHERE user_id = $1 AND id = $2
+        WHERE id = $1
     `,
-			[userId, listId]
+			[listId]
 		);
 
 		const status = results.rows[0] || {};
@@ -77,14 +62,14 @@ class List {
 		return status;
 	}
 
-	static async create(userId: number, { title, system_default = false, description, user_id }: NewList): Promise<{}> {
+	static async create({ title, systemDefault = false, description, userId }: NewList): Promise<{}> {
 		const result = await db.query(
 			`
             INSERT INTO lists (title, user_id, system_default, description)
             VALUES($1, $2, $3, $4)
             RETURNING id, title, user_id AS "userId", description
             `,
-			[title, userId, system_default, description]
+			[title, userId, systemDefault, description]
 		);
 		const newList = result.rows[0];
 		if (!newList) throw new BadRequestError();
@@ -126,4 +111,4 @@ class List {
 	}
 }
 
-export default List
+export default List;
