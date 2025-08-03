@@ -1,15 +1,8 @@
 import { db } from "../../db";
 import { BadRequestError, NotFoundError, ExpressError, UnauthorizedError } from "../ExpressError";
 import sqlForPartialUpdate from "../helpers/sql";
+import { NewStatus, UpdateStatus } from "../types/status-types";
 
-interface NewStatus {
-	name: String;
-	system_default: Boolean;
-	user_id: Number;
-}
-interface UpdateStatus {
-	name: String;
-}
 interface StatusFilters {
 	id?: number;
 }
@@ -61,14 +54,14 @@ class Status {
 		return status;
 	}
 
-	static async create(userId: number, { name, system_default = false }: NewStatus): Promise<{}> {
+	static async create(userId: number, { name, systemDefault = false }: NewStatus): Promise<{}> {
 		const result = await db.query(
 			`
             INSERT INTO statuses (name, user_id, system_default)
             VALUES($1, $2, $3)
             RETURNING id, name, user_id AS "userId"
             `,
-			[name, userId, system_default]
+			[name, userId, systemDefault]
 		);
 		const newStatus = result.rows[0];
 		if (!newStatus) throw new BadRequestError();

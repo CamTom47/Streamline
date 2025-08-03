@@ -1,3 +1,4 @@
+
 export class ExpressError extends Error {
 	message: string;
 	status: number;
