@@ -1,15 +1,10 @@
 import express, { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
 import User from "../models/user";
 import loginSchema from "../schema/auth/loginSchema.json";
 import newUserSchema from "../schema/auth/newUserSchema.json";
-import updateUserSchema from "../schema/user/updateUserSchema.json";
 import jsonschema from "jsonschema";
 import createToken from "../helpers/token";
 import { BadRequestError } from "../ExpressError";
-import { checkCorrectUserOrAdmin } from "../middleware/auth";
-import { json } from "stream/consumers";
-import { create } from "domain";
 
 const router = express.Router();
 
