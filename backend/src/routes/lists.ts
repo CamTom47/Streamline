@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import { BadRequestError } from "../ExpressError";
 import { checkLoggedIn, checkAdmin, checkCorrectUserOrAdmin } from "../middleware/auth";
-import List from "../models/list";
+import List from "@/models/list/list"
 import jsonschema from "jsonschema";
 import newListSchema from "../schema/list/newListSchema.json";
 import updateListSchema from "../schema/list/updateListSchema.json";

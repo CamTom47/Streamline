@@ -1,9 +1,9 @@
 import express, { Request, Response, NextFunction } from "express";
-import { BadRequestError } from "../ExpressError";
-import { checkCorrectUserOrAdmin } from "../middleware/auth";
-import User from "../models/user";
+import { BadRequestError } from "@/ExpressError";
+import { checkCorrectUserOrAdmin } from "@/middleware/auth";
+import User from "@/models/user/user";
 import jsonschema from "jsonschema";
-import updateUserSchema from "../schema/user/updateUserSchema.json";
+import updateUserSchema from "@/schema/user/updateUserSchema.json";
 
 const router = express.Router();
 

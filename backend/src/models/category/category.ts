@@ -1,7 +1,7 @@
-import { db } from "../../db";
-import { BadRequestError, NotFoundError, ExpressError, UnauthorizedError } from "../ExpressError";
-import sqlForPartialUpdate from "../helpers/sql";
-import { NewCategory, UpdateCategory } from "../types/category-types";
+import { db } from "../../../db";
+import { BadRequestError, NotFoundError, ExpressError, UnauthorizedError } from "../../ExpressError";
+import sqlForPartialUpdate from "../../helpers/sql";
+import { NewCategory, UpdateCategory } from "../../types/category-types";
 
 //
 class Category {
@@ -37,7 +37,7 @@ class Category {
 		return category;
 	}
 
-	static async create(userId, { name }: NewCategory): Promise<{}> {
+	static async create(userId: number, { name }: NewCategory): Promise<{}> {
 		const result = await db.query(
 			`
             INSERT INTO categories

@@ -1,6 +1,6 @@
-import { db } from "../../db";
-import { BadRequestError, NotFoundError, ExpressError, UnauthorizedError } from "../ExpressError";
-import sqlForPartialUpdate from "../helpers/sql";
+import { db } from "../../../db";
+import { BadRequestError, NotFoundError, ExpressError, UnauthorizedError } from "../../ExpressError";
+import sqlForPartialUpdate from "../../helpers/sql";
 
 interface NewList {
 	title: string;

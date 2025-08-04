@@ -1,9 +1,9 @@
 import express, { Request, Response, NextFunction } from "express";
-import User from "../models/user";
-import loginSchema from "../schema/auth/loginSchema.json";
-import newUserSchema from "../schema/auth/newUserSchema.json";
+import User from "@/models/user/user";
+import loginSchema from "@/schema/auth/loginSchema.json";
+import newUserSchema from "@/schema/auth/newUserSchema.json";
 import jsonschema from "jsonschema";
-import createToken from "../helpers/token";
+import createToken from "@/helpers/token";
 import { BadRequestError } from "../ExpressError";
 
 const router = express.Router();

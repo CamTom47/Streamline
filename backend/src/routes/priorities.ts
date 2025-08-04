@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
 import { checkLoggedIn, checkAdmin, checkCorrectUserOrAdmin } from "../middleware/auth";
-import Priority from "../models/priority";
+import Priority from "@/models/priority/priority";
 
 const router = express.Router();
 

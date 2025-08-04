@@ -1,7 +1,7 @@
-import { db } from "../../db";
-import { BadRequestError, NotFoundError, ExpressError, UnauthorizedError } from "../ExpressError";
-import sqlForPartialUpdate from "../helpers/sql";
-import { NewStatus, UpdateStatus } from "../types/status-types";
+import { db } from "../../../db";
+import { BadRequestError, NotFoundError, ExpressError, UnauthorizedError } from "../../ExpressError";
+import sqlForPartialUpdate from "../../helpers/sql";
+import { NewStatus, UpdateStatus } from "../../types/status-types";
 
 interface StatusFilters {
 	id?: number;

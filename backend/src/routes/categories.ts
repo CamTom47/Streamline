@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import { BadRequestError } from "../ExpressError";
 import { checkLoggedIn, checkAdmin, checkCorrectUserOrAdmin } from "../middleware/auth";
-import Category from "../models/category";
+import Category from "../models/category/category";
 import jsonschema from "jsonschema";
 import newCategorySchema from "../schema/category/newCategorySchema.json";
 import updateCategorySchema from "../schema/category/updateCategorySchema.json";

@@ -1,19 +1,12 @@
-import { db } from "../../db";
+import { db } from "@/../../db";
 import bcrypt from "bcrypt";
-import { NewUser, UpdateUser } from "../types/user-types";
-import { BadRequestError, NotFoundError } from "../ExpressError";
-import { BCRYPT_WORK_FACTOR } from "../../config";
-import sqlForPartialUpdate from "../helpers/sql";
+import { NewUser, UpdateUser } from "@/types/user-types";
+import { BadRequestError, NotFoundError } from "@/ExpressError";
+import { BCRYPT_WORK_FACTOR } from "@/../../config";
+import sqlForPartialUpdate from "@/helpers/sql";
 
 class User {
-	static async register({
-		firstName,
-		lastName,
-		username,
-		email,
-		password,
-		role = "member",
-	}: NewUser){
+	static async register({ firstName, lastName, username, email, password, role = "member" }: NewUser) {
 		//Check to make sure that the requested username is valid
 		const usernameExists = await db.query(
 			`
@@ -58,7 +51,7 @@ class User {
 			}
 		}
 
-        return new NotFoundError("Invalid Username/Password")
+		return new NotFoundError("Invalid Username/Password");
 	}
 
 	static async update(userId: number, data: UpdateUser): Promise<{} | void> {
